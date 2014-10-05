@@ -4,5 +4,6 @@
     <string name="app_name">Weether</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="loading_location">Loading weather for current location...</string>
 
 </resources>

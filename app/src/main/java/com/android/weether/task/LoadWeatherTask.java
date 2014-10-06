@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.weether.Weather;
+import com.android.weether.WeatherList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * class to fetch weather content. Uses Async task for separating
  * network call from main thread.
- *
+ *x
  * @author Muaz Rahman
  *
  */
@@ -128,7 +129,7 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<Weather>> {
 
     @Override
     protected void onPostExecute(List<Weather> result) {
-       //do nothing
+       WeatherList.instance().cache = result;
     }
 
 }

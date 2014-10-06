@@ -46,8 +46,6 @@ public class SplashActivity extends Activity {
                 WEATHER_URL = "http://api.wunderground.com/api/cd73277d18704fa9/forecast/q/" +
                         String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + ".json";
 
-                //Log.d(TAG, "Weather URL = " + WEATHER_URL);
-
                 AssetManager manager = getApplicationContext().getAssets();
                 try{
                     InputStream is = manager.open("weather.json");
@@ -56,6 +54,8 @@ public class SplashActivity extends Activity {
 
                 //mLoadWeatherTask = new LoadWeatherTask();
                 //mLoadWeatherTask.execute(WEATHER_URL);
+
+                WeatherList.instance().address = findGeoCode(location);
 
             }
 

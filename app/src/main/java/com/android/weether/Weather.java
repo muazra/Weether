@@ -8,16 +8,16 @@ public class Weather {
 
     private String weekday;
     private String monthname;
-    private String day;
-    private String year;
+    private int day;
+    private int year;
 
     private String conditions;
     private String icon;
 
-    private String tempHighF;
-    private String tempLowF;
-    private String tempHighC;
-    private String tempLowC;
+    private int tempHighF;
+    private int tempLowF;
+    private int tempHighC;
+    private int tempLowC;
 
 
     public String getWeekday() {
@@ -36,19 +36,19 @@ public class Weather {
         this.monthname = monthname;
     }
 
-    public String getDay() {
+    public int getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(int day) {
         this.day = day;
     }
 
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
@@ -68,35 +68,35 @@ public class Weather {
         this.icon = icon;
     }
 
-    public String getTempHighF() {
+    public int getTempHighF() {
         return tempHighF;
     }
 
-    public void setTempHighF(String tempHighF) {
+    public void setTempHighF(int tempHighF) {
         this.tempHighF = tempHighF;
     }
 
-    public String getTempLowF() {
+    public int getTempLowF() {
         return tempLowF;
     }
 
-    public void setTempLowF(String tempLowF) {
+    public void setTempLowF(int tempLowF) {
         this.tempLowF = tempLowF;
     }
 
-    public String getTempHighC() {
+    public int getTempHighC() {
         return tempHighC;
     }
 
-    public void setTempHighC(String tempHighC) {
+    public void setTempHighC(int tempHighC) {
         this.tempHighC = tempHighC;
     }
 
-    public String getTempLowC() {
+    public int getTempLowC() {
         return tempLowC;
     }
 
-    public void setTempLowC(String tempLowC) {
+    public void setTempLowC(int tempLowC) {
         this.tempLowC = tempLowC;
     }
 

@@ -95,17 +95,35 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<Weather>> {
         List<Weather> weatherList = new ArrayList<Weather>();
 
         try{
-            JSONObject response = new JSONObject(jsonString);
-            JSONArray array = response.getJSONObject("forecast").getJSONObject("simpleforecast").getJSONArray("forecastday");
-            JSONObject jsonObject = array.getJSONObject(0);
+            JSONObject respJson = new JSONObject(jsonString);
+            JSONArray jsonArray = respJson.getJSONObject("forecast").getJSONObject("simpleforecast").getJSONArray("forecastday");
+            JSONObject jsonObject;
 
-            Log.d(TAG, jsonObject.getJSONObject("date").getString("weekday"));
+            for(int i = 0; i < jsonArray.length(); i++) {
+                Weather weather = new Weather();
+                jsonObject = jsonArray.getJSONObject(i);
+
+                weather.setYear(jsonObject.getJSONObject("date").getInt("year"));
+                weather.setDay(jsonObject.getJSONObject("date").getInt("day"));
+                weather.setMonthname(jsonObject.getJSONObject("date").getString("monthname"));
+                weather.setWeekday(jsonObject.getJSONObject("date").getString("weekday"));
+
+                weather.setConditions(jsonObject.getString("conditions"));
+                weather.setIcon(jsonObject.getString("icon"));
+
+                weather.setTempHighF(jsonObject.getJSONObject("high").getInt("fahrenheit"));
+                weather.setTempHighC(jsonObject.getJSONObject("high").getInt("celsius"));
+                weather.setTempLowF(jsonObject.getJSONObject("low").getInt("fahrenheit"));
+                weather.setTempLowC(jsonObject.getJSONObject("low").getInt("celsius"));
+
+                weatherList.add(weather);
+            }
 
         }catch(JSONException e){
             e.printStackTrace();
         }
 
-        return null;
+        return weatherList;
     }
 
     @Override

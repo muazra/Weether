@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class WeatherListActivity extends ListActivity {
     private static final String TAG = "WeatherListActivity";
+    private TextView mAddressView;
+    private String mAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -30,6 +32,10 @@ public class WeatherListActivity extends ListActivity {
 
         WeatherListAdapter adapter =
                 new WeatherListAdapter(this, WeatherListModel.instance().weatherList);
+
+        mAddressView = (TextView) findViewById(R.id.address);
+        mAddress = WeatherListModel.instance().address.get(0).getLocality() + "," + WeatherListModel.instance().address.get(0).getAdminArea();
+        mAddressView.setText(mAddress);
 
         setListAdapter(adapter);
 
@@ -57,12 +63,12 @@ public class WeatherListActivity extends ListActivity {
             WeatherModel weatherModel = mWeatherModels.get(position);
 
             SmartImageView imageView = (SmartImageView) weatherRow.findViewById(R.id.icon);
-            TextView dayTextView = (TextView) weatherRow.findViewById(R.id.day);
+            TextView dayTextView = (TextView) weatherRow.findViewById(R.id.weekday);
             TextView tempTextView = (TextView) weatherRow.findViewById(R.id.temp);
             TextView descriptionTextView = (TextView) weatherRow.findViewById(R.id.description);
 
             imageView.setImageUrl(weatherModel.getIcon());
-            dayTextView.setText(String.valueOf(weatherModel.getDay()));
+            dayTextView.setText(weatherModel.getWeekday());
             tempTextView.setText(String.valueOf(weatherModel.getTempHighF()));
             descriptionTextView.setText(weatherModel.getConditions());
 

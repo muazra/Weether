@@ -2,8 +2,6 @@ package com.android.weether;
 
 import android.app.Activity;
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -11,9 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.android.weether.task.LoadWeatherTask;
+import com.android.weether.util.GeoCode;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 
 public class SplashActivity extends Activity {
@@ -43,7 +40,8 @@ public class SplashActivity extends Activity {
                 mLoadWeatherTask = new LoadWeatherTask(mContext);
                 mLoadWeatherTask.execute(WEATHER_URL);
 
-                WeatherListModel.instance().address = findGeoCode(location);
+                GeoCode geocode = new GeoCode(getApplicationContext(), Locale.getDefault());
+                WeatherListModel.instance().address = geocode.find(location);
             }
 
             @Override
@@ -57,18 +55,6 @@ public class SplashActivity extends Activity {
         };
 
         mlocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, mlocationListener, null);
-    }
-
-    protected List<Address> findGeoCode(Location location){
-        Geocoder geoCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-        try {
-            List<Address> address = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            if (address.size() > 0) {
-                return address;
-            }
-        }catch(IOException e){}
-
-        return null;
     }
 
 }

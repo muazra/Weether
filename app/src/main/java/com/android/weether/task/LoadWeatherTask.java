@@ -3,7 +3,6 @@ package com.android.weether.task;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.android.weether.WeatherListActivity;
 import com.android.weether.WeatherListModel;
@@ -53,8 +52,6 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
      * @return List Containing Weather class objects
      */
     private List<WeatherModel> fetchContent(String URL){
-        Log.d(TAG, "fetchContent");
-
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(URL);
         try{
@@ -76,8 +73,6 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
      * @return : Converted String
      */
     private String buildString(InputStream is){
-        Log.d(TAG, "buildString");
-
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder builder = new StringBuilder();
         String line;
@@ -99,8 +94,6 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
      * @return : List of type Article
      */
     private List<WeatherModel> parseJSON(String jsonString){
-        Log.d(TAG, "parseJSON");
-
         List<WeatherModel> weatherList = new ArrayList<WeatherModel>();
 
         try{

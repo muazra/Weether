@@ -4,7 +4,7 @@ package com.android.weether;
  * Class for weather object.
  * @author Muaz Rahman
  */
-public class Weather {
+public class WeatherModel {
 
     private String weekday;
     private String monthname;

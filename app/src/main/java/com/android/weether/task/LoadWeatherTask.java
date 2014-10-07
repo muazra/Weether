@@ -1,10 +1,13 @@
 package com.android.weether.task;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.android.weether.Weather;
-import com.android.weether.WeatherList;
+import com.android.weether.WeatherListActivity;
+import com.android.weether.WeatherListModel;
+import com.android.weether.WeatherModel;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -23,17 +26,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * class to fetch weather content. Uses Async task for separating
+ * Class to fetch weather content. Uses Async task for separating
  * network call from main thread.
- *x
+ *
  * @author Muaz Rahman
  *
  */
-public class LoadWeatherTask extends AsyncTask<String, Integer, List<Weather>> {
+public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherModel>> {
     private static final String TAG = "LoadWeatherTask";
+    private Context mContext;
+
+    public LoadWeatherTask(Context context){
+        mContext = context.getApplicationContext();
+    }
 
     @Override
-    protected List<Weather> doInBackground(String... params){
+    protected List<WeatherModel> doInBackground(String... params){
         return fetchContent(params[0]);
     }
 
@@ -44,7 +52,7 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<Weather>> {
      *           :  String URL to make the HTTP request
      * @return List Containing Weather class objects
      */
-    private List<Weather> fetchContent(String URL){
+    private List<WeatherModel> fetchContent(String URL){
         Log.d(TAG, "fetchContent");
 
         HttpClient httpClient = new DefaultHttpClient();
@@ -90,10 +98,10 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<Weather>> {
      *            :  String received as response from URL
      * @return : List of type Article
      */
-    private List<Weather> parseJSON(String jsonString){
+    private List<WeatherModel> parseJSON(String jsonString){
         Log.d(TAG, "parseJSON");
 
-        List<Weather> weatherList = new ArrayList<Weather>();
+        List<WeatherModel> weatherList = new ArrayList<WeatherModel>();
 
         try{
             JSONObject respJson = new JSONObject(jsonString);
@@ -101,7 +109,7 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<Weather>> {
             JSONObject jsonObject;
 
             for(int i = 0; i < jsonArray.length(); i++) {
-                Weather weather = new Weather();
+                WeatherModel weather = new WeatherModel();
                 jsonObject = jsonArray.getJSONObject(i);
 
                 weather.setYear(jsonObject.getJSONObject("date").getInt("year"));
@@ -110,7 +118,7 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<Weather>> {
                 weather.setWeekday(jsonObject.getJSONObject("date").getString("weekday"));
 
                 weather.setConditions(jsonObject.getString("conditions"));
-                weather.setIcon(jsonObject.getString("icon"));
+                weather.setIcon(jsonObject.getString("icon_url"));
 
                 weather.setTempHighF(jsonObject.getJSONObject("high").getInt("fahrenheit"));
                 weather.setTempHighC(jsonObject.getJSONObject("high").getInt("celsius"));
@@ -128,8 +136,13 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<Weather>> {
     }
 
     @Override
-    protected void onPostExecute(List<Weather> result) {
-       WeatherList.instance().cache = result;
+    protected void onPostExecute(List<WeatherModel> result) {
+        super.onPostExecute(result);
+        WeatherListModel.instance().weatherList = result;
+
+        Intent i = new Intent(mContext, WeatherListActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(i);
     }
 
 }

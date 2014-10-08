@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textSize="35dp"
         android:gravity="center"
-        android:textStyle="bold"
+        android:textStyle="bold|italic"
         android:id="@+id/address"
         android:textColor="@android:color/white"/>
 
@@ -23,30 +23,30 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.25"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DAY"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="@android:color/white"
+            android:layout_weight="0.75"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TEMP"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="@android:color/white"
             android:layout_weight="0.5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Day"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="@android:color/white"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Temp"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="@android:color/white"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Conditions"
+            android:text="CONDITIONS"
             android:gravity="center"
             android:textSize="20dp"
             android:textColor="@android:color/white"

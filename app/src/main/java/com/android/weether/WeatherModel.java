@@ -12,7 +12,7 @@ public class WeatherModel {
     private int year;
 
     private String conditions;
-    private String icon;
+    private String iconURL;
 
     private int tempHighF;
     private int tempLowF;
@@ -60,12 +60,12 @@ public class WeatherModel {
         this.conditions = conditions;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getIconURL() {
+        return iconURL;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setIconURL(String icon) {
+        this.iconURL = icon;
     }
 
     public int getTempHighF() {

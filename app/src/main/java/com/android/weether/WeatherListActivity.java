@@ -3,7 +3,9 @@ package com.android.weether;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -34,7 +36,7 @@ public class WeatherListActivity extends ListActivity {
                 new WeatherListAdapter(this, WeatherListModel.instance().weatherList);
 
         mAddressView = (TextView) findViewById(R.id.address);
-        mAddress = WeatherListModel.instance().address.get(0).getLocality() + "," + WeatherListModel.instance().address.get(0).getAdminArea();
+        mAddress = WeatherListModel.instance().address.get(0).getLocality() + "-" + WeatherListModel.instance().address.get(0).getAdminArea();
         mAddressView.setText(mAddress);
 
         setListAdapter(adapter);
@@ -67,7 +69,7 @@ public class WeatherListActivity extends ListActivity {
             TextView tempTextView = (TextView) weatherRow.findViewById(R.id.temp);
             TextView descriptionTextView = (TextView) weatherRow.findViewById(R.id.description);
 
-            imageView.setImageUrl(weatherModel.getIcon());
+            imageView.setImageUrl(weatherModel.getIconURL());
             dayTextView.setText(weatherModel.getWeekday());
             tempTextView.setText(String.valueOf(weatherModel.getTempHighF()));
             descriptionTextView.setText(weatherModel.getConditions());
@@ -76,5 +78,23 @@ public class WeatherListActivity extends ListActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.weather_list_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        // Quit if back is pressed
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

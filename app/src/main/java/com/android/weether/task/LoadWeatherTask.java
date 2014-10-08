@@ -108,10 +108,10 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
                 weather.setYear(jsonObject.getJSONObject("date").getInt("year"));
                 weather.setDay(jsonObject.getJSONObject("date").getInt("day"));
                 weather.setMonthname(jsonObject.getJSONObject("date").getString("monthname"));
-                weather.setWeekday(jsonObject.getJSONObject("date").getString("weekday"));
+                weather.setWeekday(jsonObject.getJSONObject("date").getString("weekday_short"));
 
                 weather.setConditions(jsonObject.getString("conditions"));
-                weather.setIcon(jsonObject.getString("icon_url"));
+                weather.setIconURL(jsonObject.getString("icon_url"));
 
                 weather.setTempHighF(jsonObject.getJSONObject("high").getInt("fahrenheit"));
                 weather.setTempHighC(jsonObject.getJSONObject("high").getInt("celsius"));

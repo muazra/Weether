@@ -11,6 +11,7 @@ import java.util.List;
 public class WeatherListModel {
     public List<WeatherModel> weatherList;
     public List<Address> address;
+    public int numDays;
     private WeatherListModel() {}
 
     static WeatherListModel obj = null;

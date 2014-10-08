@@ -3,56 +3,17 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:background="@android:color/black"
+              android:background="@drawable/weather_background"
               tools:context=".WeatherListActivity">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="35dp"
+        android:id="@+id/banner"
         android:gravity="center"
-        android:textStyle="bold|italic"
-        android:id="@+id/address"
-        android:textColor="@android:color/white"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DAY"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="@android:color/white"
-            android:layout_weight="0.75"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TEMP"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="@android:color/white"
-            android:layout_weight="0.5"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CONDITIONS"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="@android:color/white"
-            android:layout_weight="1"/>
-
-        </LinearLayout>
+        android:textColor="@android:color/black"
+        android:padding="10dp"
+        />
 
     <ListView
         android:id="@android:id/list"

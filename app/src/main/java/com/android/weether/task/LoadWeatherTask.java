@@ -3,6 +3,7 @@ package com.android.weether.task;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.android.weether.WeatherListActivity;
 import com.android.weether.WeatherListModel;
@@ -34,9 +35,11 @@ import java.util.List;
 public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherModel>> {
     private static final String TAG = "LoadWeatherTask";
     private Context mContext;
+    private Boolean mAlert;
 
-    public LoadWeatherTask(Context context){
-        mContext = context.getApplicationContext();
+    public LoadWeatherTask(Context context, Boolean alert){
+        mContext = context;
+        mAlert = alert;
     }
 
     @Override
@@ -130,12 +133,16 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
 
     @Override
     protected void onPostExecute(List<WeatherModel> result) {
-        super.onPostExecute(result);
         WeatherListModel.instance().weatherList = result;
 
-        Intent i = new Intent(mContext, WeatherListActivity.class);
+        if(mAlert){
+            Toast toast = Toast.makeText(mContext.getApplicationContext(), "Refresh Complete", Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+        Intent i = new Intent(mContext.getApplicationContext(), WeatherListActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(i);
+        mContext.getApplicationContext().startActivity(i);
     }
 
 }

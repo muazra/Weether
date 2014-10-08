@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:id="@+id/row_layout">
 
-    <com.loopj.android.image.SmartImageView
-        android:id="@+id/icon"
-        android:layout_weight="0.5"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/weekday"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:paddingRight="50dp"
+        android:paddingLeft="10dp"
+        android:textColor="@android:color/black"
+        android:layout_alignTop="@+id/icon"
+        android:layout_alignBottom="@+id/icon"/>
+
+    <com.loopj.android.image.SmartImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/weekday"
+        android:id="@+id/icon"
+        android:padding="15dp"
         />
 
     <TextView
-        android:id="@+id/weekday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:textColor="@android:color/white" />
-
-    <TextView
+        android:layout_toRightOf="@id/icon"
+        android:layout_alignParentRight="true"
         android:id="@+id/temp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:textColor="@android:color/white" />
+        android:textSize="16dp"
+        android:gravity="center|center_vertical"
+        android:textColor="@android:color/black"
+        />
 
     <TextView
-        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:textColor="@android:color/white" />
+        android:id="@+id/description"
+        android:layout_alignLeft="@+id/temp"
+        android:layout_alignStart="@+id/temp"
+        android:layout_alignRight="@+id/temp"
+        android:layout_alignEnd="@+id/temp"
+        android:layout_alignBottom="@+id/icon"
+        android:textSize="16dp"
+        android:gravity="center|center_vertical"
+        android:textColor="@android:color/black"
+        android:layout_below="@+id/temp"/>
 
-</LinearLayout>
+
+</RelativeLayout>

@@ -1,19 +1,30 @@
 package com.android.weether;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.weether.task.LoadWeatherTask;
+import com.android.weether.util.GeoCode;
 import com.loopj.android.image.SmartImageView;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Class to display fetched weather content
@@ -24,23 +35,36 @@ import java.util.List;
  */
 public class WeatherListActivity extends ListActivity {
     private static final String TAG = "WeatherListActivity";
-    private TextView mAddressView;
-    private String mAddress;
+    private Context mContext = this;
+
+    private String mCity;
+    private String mState;
+    private TextView mBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weatherlist);
 
+        actionBarTasks();
+        mBanner = (TextView) findViewById(R.id.banner);
+        mBanner.setText("CURRENT AND NEXT " + WeatherListModel.instance().numDays + " DAYS");
+
         WeatherListAdapter adapter =
                 new WeatherListAdapter(this, WeatherListModel.instance().weatherList);
 
-        mAddressView = (TextView) findViewById(R.id.address);
-        mAddress = WeatherListModel.instance().address.get(0).getLocality() + "-" + WeatherListModel.instance().address.get(0).getAdminArea();
-        mAddressView.setText(mAddress);
-
         setListAdapter(adapter);
 
+    }
+
+    private void actionBarTasks(){
+        ActionBar ab = getActionBar();
+        mCity = WeatherListModel.instance().address.get(0).getLocality();
+        mState = WeatherListModel.instance().address.get(0).getAdminArea();
+        ab.setTitle(mCity + ", " + mState);
+
+        Drawable d = getResources().getDrawable(R.drawable.weather_background);
+        getActionBar().setBackgroundDrawable(d);
     }
 
     private class WeatherListAdapter extends ArrayAdapter<WeatherModel> {
@@ -71,7 +95,7 @@ public class WeatherListActivity extends ListActivity {
 
             imageView.setImageUrl(weatherModel.getIconURL());
             dayTextView.setText(weatherModel.getWeekday());
-            tempTextView.setText(String.valueOf(weatherModel.getTempHighF()));
+            tempTextView.setText(String.valueOf(weatherModel.getTempHighF()) + "°F");
             descriptionTextView.setText(weatherModel.getConditions());
 
             return weatherRow;
@@ -80,9 +104,61 @@ public class WeatherListActivity extends ListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.weather_list_activity, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch(id){
+            case R.id.action_settings:
+                break;
+            case R.id.action_refresh:
+                Toast.makeText(mContext.getApplicationContext(), "Refreshing..", Toast.LENGTH_LONG).show();
+                refreshFeed();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void refreshFeed(){
+        LocationManager mlocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationListener mlocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                GeoCode geocode = new GeoCode(getApplicationContext(), Locale.getDefault());
+
+                if(WeatherListModel.instance().address.get(0).getLocality().equals(geocode.find(location).get(0).getLocality())){
+                    Toast.makeText(mContext.getApplicationContext(), "No location change detected", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    WeatherListModel.instance().address = geocode.find(location);
+                    WeatherListModel.instance().numDays = 3;
+
+                    String WEATHER_URL = "http://api.wunderground.com/api/cd73277d18704fa9/forecast/q/" +
+                            String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + ".json";
+
+                    Log.d("TAG", "Weather URL = " + WEATHER_URL);
+
+                    LoadWeatherTask mLoadWeatherTask = new LoadWeatherTask(mContext, true);
+                    mLoadWeatherTask.execute(WEATHER_URL);
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {}
+            @Override
+            public void onProviderEnabled(String s) {}
+            @Override
+            public void onProviderDisabled(String s) {
+                Log.d(TAG, "Location services NOT enabled");
+            }
+        };
+
+        mlocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, mlocationListener, null);
     }
 
     @Override

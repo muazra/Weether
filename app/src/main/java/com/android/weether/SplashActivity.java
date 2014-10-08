@@ -37,11 +37,12 @@ public class SplashActivity extends Activity {
 
                 Log.d("TAG", "Weather URL = " + WEATHER_URL);
 
-                mLoadWeatherTask = new LoadWeatherTask(mContext);
+                mLoadWeatherTask = new LoadWeatherTask(mContext, false);
                 mLoadWeatherTask.execute(WEATHER_URL);
 
                 GeoCode geocode = new GeoCode(getApplicationContext(), Locale.getDefault());
                 WeatherListModel.instance().address = geocode.find(location);
+                WeatherListModel.instance().numDays = 3;
             }
 
             @Override

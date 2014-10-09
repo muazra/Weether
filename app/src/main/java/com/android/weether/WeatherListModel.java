@@ -1,7 +1,5 @@
 package com.android.weether;
 
-import android.location.Address;
-
 import java.util.List;
 
 /**
@@ -10,8 +8,9 @@ import java.util.List;
  */
 public class WeatherListModel {
     public List<WeatherModel> weatherList;
-    public List<Address> address;
     public int numDays;
+    public String city;
+    public String state;
     private WeatherListModel() {}
 
     static WeatherListModel obj = null;

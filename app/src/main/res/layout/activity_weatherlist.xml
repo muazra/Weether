@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/banner"
         android:gravity="center"
+        android:textSize="15dp"
         android:textColor="@android:color/black"
-        android:padding="10dp"
+        android:padding="15dp"
         />
 
     <ListView

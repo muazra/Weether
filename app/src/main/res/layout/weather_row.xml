@@ -2,54 +2,71 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:id="@+id/row_layout">
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:id="@+id/linear1_row">
+
+        <TextView
+            android:id="@+id/weekday"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:paddingLeft="15dp"
+            android:textSize="30dp"
+            android:textColor="@android:color/black"/>
+
+        <com.loopj.android.image.SmartImageView
+            android:id="@+id/icon"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear2_row"
+        android:layout_width="180dp"
+        android:layout_height="25dp"
+        android:orientation="horizontal"
+        android:layout_toRightOf="@id/linear1_row">
+
+        <TextView
+            android:id="@+id/tempHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textColor="@android:color/holo_red_light"/>
+
+        <TextView
+            android:id="@+id/tempLow"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textColor="@android:color/black"/>
+
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:id="@+id/weekday"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:paddingRight="50dp"
-        android:paddingLeft="10dp"
-        android:textColor="@android:color/black"
-        android:layout_alignTop="@+id/icon"
-        android:layout_alignBottom="@+id/icon"/>
-
-    <com.loopj.android.image.SmartImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/weekday"
-        android:id="@+id/icon"
-        android:padding="15dp"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/icon"
-        android:layout_alignParentRight="true"
-        android:id="@+id/temp"
-        android:textSize="16dp"
-        android:gravity="center|center_vertical"
-        android:textColor="@android:color/black"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/description"
-        android:layout_alignLeft="@+id/temp"
-        android:layout_alignStart="@+id/temp"
-        android:layout_alignRight="@+id/temp"
-        android:layout_alignEnd="@+id/temp"
-        android:layout_alignBottom="@+id/icon"
-        android:textSize="16dp"
-        android:gravity="center|center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/linear1_row"
+        android:layout_below="@id/linear2_row"
+        android:layout_alignRight="@id/linear2_row"
+        android:layout_alignBottom="@id/linear1_row"
+        android:textSize="18dp"
+        android:gravity="center"
         android:textColor="@android:color/black"
-        android:layout_below="@+id/temp"/>
-
+        />
 
 </RelativeLayout>

@@ -35,11 +35,11 @@ import java.util.List;
 public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherModel>> {
     private static final String TAG = "LoadWeatherTask";
     private Context mContext;
-    private Boolean mAlert;
+    private Boolean mFetchCurrent;
 
-    public LoadWeatherTask(Context context, Boolean alert){
+    public LoadWeatherTask(Context context, Boolean fetchCurrent){
         mContext = context;
-        mAlert = alert;
+        mFetchCurrent = fetchCurrent;
     }
 
     @Override
@@ -135,9 +135,8 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
     protected void onPostExecute(List<WeatherModel> result) {
         WeatherListModel.instance().weatherList = result;
 
-        if(mAlert){
-            Toast toast = Toast.makeText(mContext.getApplicationContext(), "Refresh Complete", Toast.LENGTH_LONG);
-            toast.show();
+        if(mFetchCurrent){
+            Toast.makeText(mContext.getApplicationContext(), "Weather set for current location.", Toast.LENGTH_LONG).show();
         }
 
         Intent i = new Intent(mContext.getApplicationContext(), WeatherListActivity.class);

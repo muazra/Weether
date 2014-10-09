@@ -5,6 +5,23 @@
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
 
-    <string name="loading_location">Loading weather for current location...</string>
+    <string name="splash_currentlocation">Loading weather for current location...</string>
+    <string name="splash_savedlocation">Loading weather for saved location...</string>
+    <string name="days_displayed">Days Displayed</string>
+    <string name="temp_type">Temperature Type</string>
+    <string name="set_location">Set Location</string>
+    <string name="cancel_settings">Cancel</string>
+    <string name="save_settings">Save</string>
+    <string name="settings_location_hint">Enter Zipcode</string>
+
+    <string-array name="display_days">
+        <item>3</item><item>4</item><item>5</item><item>6</item>
+        <item>7</item><item>8</item><item>9</item><item>10</item>
+    </string-array>
+
+    <string-array name="temp_type">
+        <item>Farenheit</item>
+        <item>Celcius</item>
+    </string-array>
 
 </resources>

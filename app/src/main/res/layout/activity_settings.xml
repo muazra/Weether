@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="100dp">
+        android:paddingTop="20dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -87,9 +87,9 @@
             android:hint="@string/settings_location_hint"
             android:layout_weight="0.7"
             android:textSize="18dp"
+            android:id="@+id/enter_zipcode"
             android:gravity="center"
             />
-
 
     </LinearLayout>
 
@@ -117,6 +117,13 @@
             android:gravity="center"
             />
 
-        </LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar_settings"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:visibility="invisible"/>
 
 </LinearLayout>

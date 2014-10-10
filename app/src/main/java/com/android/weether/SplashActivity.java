@@ -32,16 +32,10 @@ public class SplashActivity extends Activity {
 
         mSplashText = (TextView) findViewById(R.id.splash_textView);
 
-        setNumDays();
         setLocation();
     }
 
-    private void setNumDays(){
-        SharedPreferences days = getSharedPreferences("DAYS", 0);
-        WeatherListModel.instance().numDays = days.getInt("num_days", 2);
-    }
-
-    private void setLocation(){
+    protected void setLocation(){
         SharedPreferences location = getSharedPreferences("LOCATIONS", 0);
         boolean locations_exist = location.getBoolean("locations_exist", false);
 
@@ -54,7 +48,7 @@ public class SplashActivity extends Activity {
         }
     }
 
-    private void serveSavedLocation(SharedPreferences location){
+    protected void serveSavedLocation(SharedPreferences location){
         mLoadWeatherTask = new LoadWeatherTask(mContext, false);
         WeatherListModel.instance().city = location.getString("city", "null");
         WeatherListModel.instance().state = location.getString("state", "null");
@@ -66,7 +60,7 @@ public class SplashActivity extends Activity {
             mLoadWeatherTask.execute(WEATHER_URL);
     }
 
-    private void serveCurrentLocation(){
+    protected void serveCurrentLocation(){
         mlocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mlocationListener = new LocationListener() {
             @Override
@@ -75,6 +69,7 @@ public class SplashActivity extends Activity {
                         String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + ".json";
 
                 Log.d(TAG, "Weather URL = " + WEATHER_URL);
+
 
                 mLoadWeatherTask = new LoadWeatherTask(mContext, true);
                 mLoadWeatherTask.execute(WEATHER_URL);

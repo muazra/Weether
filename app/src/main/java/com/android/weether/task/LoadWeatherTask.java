@@ -1,5 +1,6 @@
 package com.android.weether.task;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -36,11 +37,20 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
     private static final String TAG = "LoadWeatherTask";
     private Context mContext;
     private Boolean mFetchCurrent;
+    private ProgressDialog mProgressDialog;
 
     public LoadWeatherTask(Context context, Boolean fetchCurrent){
         mContext = context;
         mFetchCurrent = fetchCurrent;
     }
+
+    @Override
+    protected void onPreExecute(){
+        if(mFetchCurrent){
+            mProgressDialog = mProgressDialog.show(mContext,"Loading...","Please wait...",false);
+        }
+    }
+
 
     @Override
     protected List<WeatherModel> doInBackground(String... params){
@@ -136,7 +146,8 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
         WeatherListModel.instance().weatherList = result;
 
         if(mFetchCurrent){
-            Toast.makeText(mContext.getApplicationContext(), "Weather set for current location.", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext.getApplicationContext(), "Weather set for current location", Toast.LENGTH_LONG).show();
+            mProgressDialog.dismiss();
         }
 
         Intent i = new Intent(mContext.getApplicationContext(), WeatherListActivity.class);

@@ -6,6 +6,7 @@
       <w>geolookup</w>
       <w>mlocation</w>
       <w>monthname</w>
+      <w>zipcode</w>
     </words>
   </dictionary>
 </component>

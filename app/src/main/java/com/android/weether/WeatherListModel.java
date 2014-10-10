@@ -11,7 +11,11 @@ public class WeatherListModel {
     public int numDays;
     public String city;
     public String state;
-    private WeatherListModel() {}
+    public boolean refreshSelect;
+
+    private WeatherListModel() {
+        refreshSelect = false;
+    }
 
     static WeatherListModel obj = null;
     public static synchronized WeatherListModel instance() {

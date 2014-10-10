@@ -49,11 +49,15 @@ public class WeatherListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weatherlist);
 
+        Log.d(TAG, "onCreate method - WeatherListActivity");
+
+        SharedPreferences days = getSharedPreferences("DAYS", 0);
+        WeatherListModel.instance().numDays = days.getInt("num_days", 2);
+
         mBanner = (TextView) findViewById(R.id.banner);
         mBanner.setText("CURRENT AND NEXT " + WeatherListModel.instance().numDays + " DAYS");
 
         List<WeatherModel> weatherModel = new ArrayList<WeatherModel>();
-
         for(int i = 0; i <= WeatherListModel.instance().numDays; i++){
             weatherModel.add(WeatherListModel.instance().weatherList.get(i));
         }
@@ -76,7 +80,7 @@ public class WeatherListActivity extends ListActivity {
         }
 
         SharedPreferences temp = getSharedPreferences("TEMP", 0);
-        Boolean temp_type = temp.getBoolean("farenheit", true);
+        String temp_type = temp.getString("temp_type", "Farenheit");
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -97,7 +101,7 @@ public class WeatherListActivity extends ListActivity {
             dayTextView.setText(weatherModel.getWeekday());
             descriptionTextView.setText(weatherModel.getConditions());
 
-            if(temp_type) {
+            if(temp_type.equals("Farenheit")) {
                 tempHighTextView.setText(String.valueOf(weatherModel.getTempHighF()) + "°F");
                 tempLowTextView.setText(String.valueOf(weatherModel.getTempLowF()) + "°F");
             }
@@ -105,7 +109,6 @@ public class WeatherListActivity extends ListActivity {
                 tempHighTextView.setText(String.valueOf(weatherModel.getTempHighC()) + "°C");
                 tempLowTextView.setText(String.valueOf(weatherModel.getTempLowC()) + "°C");
             }
-
 
             return weatherRow;
         }
@@ -115,6 +118,12 @@ public class WeatherListActivity extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.weather_list_activity, menu);
         ActionBar ab = getActionBar();
+
+        if(!WeatherListModel.instance().refreshSelect) {
+            SharedPreferences location = getSharedPreferences("LOCATIONS", 0);
+            WeatherListModel.instance().city = location.getString("city", WeatherListModel.instance().city);
+            WeatherListModel.instance().state = location.getString("state", WeatherListModel.instance().state);
+        }
 
         mCity = WeatherListModel.instance().city;
         mState = WeatherListModel.instance().state;
@@ -135,7 +144,7 @@ public class WeatherListActivity extends ListActivity {
                 startActivity(i);
                 return true;
             case R.id.action_place:
-                Toast.makeText(mContext.getApplicationContext(), "Fetching weather for current location..", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext.getApplicationContext(), "Fetching weather for current location...", Toast.LENGTH_LONG).show();
                 refreshFeed();
                 return true;
         }
@@ -156,8 +165,9 @@ public class WeatherListActivity extends ListActivity {
                 else {
                     WeatherListModel.instance().city = geocode.find(location).get(0).getLocality();
                     WeatherListModel.instance().state = geocode.find(location).get(0).getAdminArea();
+                    WeatherListModel.instance().refreshSelect = true;
 
-                    String WEATHER_URL = "http://api.wunderground.com/api/cd73277d18704fa9/forecast/q/" +
+                    String WEATHER_URL = "http://api.wunderground.com/api/cd73277d18704fa9/forecast10day/q/" +
                             String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + ".json";
 
                     Log.d("TAG", "Weather URL = " + WEATHER_URL);

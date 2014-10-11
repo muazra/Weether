@@ -52,13 +52,13 @@ public class WeatherListActivity extends ListActivity {
         Log.d(TAG, "onCreate method - WeatherListActivity");
 
         SharedPreferences days = getSharedPreferences("DAYS", 0);
-        WeatherListModel.instance().numDays = days.getInt("num_days", 2);
+        int numDays = days.getInt("num_days", 3) - 1;
 
         mBanner = (TextView) findViewById(R.id.banner);
-        mBanner.setText("CURRENT AND NEXT " + WeatherListModel.instance().numDays + " DAYS");
+        mBanner.setText("CURRENT AND NEXT " + numDays + " DAYS");
 
         List<WeatherModel> weatherModel = new ArrayList<WeatherModel>();
-        for(int i = 0; i <= WeatherListModel.instance().numDays; i++){
+        for(int i = 0; i <= numDays; i++){
             weatherModel.add(WeatherListModel.instance().weatherList.get(i));
         }
 

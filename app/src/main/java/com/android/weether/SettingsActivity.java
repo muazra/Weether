@@ -2,7 +2,9 @@ package com.android.weether;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.weether.task.LoadWeatherTask;
 
@@ -40,10 +43,15 @@ public class SettingsActivity extends Activity {
     private static final String TAG = "SettingsActivity";
     private Button mCancel;
     private Button mSave;
+    private Button mClear;
     private Spinner mSpinnerDays;
     private Spinner mSpinnerTemp;
     private EditText mEnterZipcode;
     private ProgressBar mProgressBar;
+    private TextView mDefaultLocation;
+    private TextView mDefaultDays;
+    private TextView mDefaultTemp;
+
     private Context mContext = this;
 
     private String tempSelected;
@@ -58,18 +66,36 @@ public class SettingsActivity extends Activity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar_settings);
         mEnterZipcode = (EditText) findViewById(R.id.enter_zipcode);
 
+        mDefaultLocation = (TextView) findViewById(R.id.current_default_location);
+        SharedPreferences location = getSharedPreferences("LOCATIONS", 0);
+        if(location.getBoolean("locations_exist", false)){
+            mDefaultLocation.setText("Default: " + location.getString("city", WeatherListModel.instance().city) + "," +
+                    location.getString("state", WeatherListModel.instance().state));
+        }
+        else{
+            mDefaultLocation.setText("Default: Current Location");
+        }
+
+        mDefaultDays = (TextView) findViewById(R.id.current_default_days);
+        SharedPreferences days = getSharedPreferences("DAYS", 0);
+        mDefaultDays.setText("Default: " + days.getInt("num_days", 2));
+
+        mDefaultTemp = (TextView) findViewById(R.id.current_default_temp);
+        SharedPreferences temp = getSharedPreferences("TEMP", 0);
+        mDefaultTemp.setText("Default: " + temp.getString("temp_type", "Farenheit"));
+
         mSpinnerDays = (Spinner) findViewById(R.id.spinner_days);
         mSpinnerDays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String day = (String) adapterView.getItemAtPosition(i);
-                daysSelected = Integer.parseInt(day) - 1;
+                daysSelected = Integer.parseInt(day);
                 Log.d(TAG, "Day selected = " + daysSelected);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                Log.d(TAG, "NONE days selected");
             }
         });
 
@@ -83,7 +109,7 @@ public class SettingsActivity extends Activity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                Log.d(TAG, "NONE temp selected");
             }
         });
 
@@ -97,6 +123,31 @@ public class SettingsActivity extends Activity {
             }
         });
 
+        mClear = (Button) findViewById(R.id.clear_defaults_button);
+        mClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_DARK);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Are you sure you want to clear all defaults to factory setting?");
+                builder.setIcon(R.drawable.ic_action_warning);
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+                builder.show();
+            }
+
+        });
+
         mSave = (Button) findViewById(R.id.save_settings);
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,12 +156,13 @@ public class SettingsActivity extends Activity {
                 hideKeyboard();
 
                 SharedPreferences days = getSharedPreferences("DAYS", 0);
-                if(days.getInt("num_days", 2) != daysSelected){
+                if(days.getInt("num_days", 3) != daysSelected){
                     Log.d(TAG, "Editing days shared prefs..");
                     SharedPreferences.Editor editor = days.edit();
                     editor.putInt("num_days", daysSelected);
                     editor.commit();
                 }
+
                 SharedPreferences temp = getSharedPreferences("TEMP", 0);
                 if(!temp.getString("temp_type", "Farenheit").equals(tempSelected)){
                     SharedPreferences.Editor editor = temp.edit();

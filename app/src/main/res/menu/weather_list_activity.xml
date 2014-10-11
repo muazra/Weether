@@ -3,7 +3,7 @@
       tools:context=".WeatherListActivity" >
 
     <item android:id="@+id/action_place"
-          android:title="@string/action_refresh"
+          android:title="@string/action_place"
           android:icon="@drawable/ic_action_place"
           android:showAsAction="always" />
 

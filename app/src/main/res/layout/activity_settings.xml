@@ -32,7 +32,22 @@
             android:entries="@array/display_days">
             </Spinner>
 
-    </LinearLayout>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/current_default_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"
+            android:gravity="left|center"/>
+
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/settings_temp"
@@ -61,7 +76,22 @@
             android:entries="@array/temp_type">
         </Spinner>
 
-    </LinearLayout>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/current_default_temp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"
+            android:gravity="left|center"/>
+
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/settings_zipcode"
@@ -91,7 +121,22 @@
             android:gravity="center"
             />
 
-    </LinearLayout>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/current_default_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"
+            android:gravity="left|center"/>
+
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/settings_buttons"
@@ -99,7 +144,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="25dp">
+        android:paddingTop="20dp">
 
         <Button
             android:id="@+id/cancel_settings"
@@ -117,7 +162,23 @@
             android:gravity="center"
             />
 
-    </LinearLayout>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="5dp">
+
+        <Button
+            android:id="@+id/clear_defaults_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/clear_defaults"/>
+
+        </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar_settings"

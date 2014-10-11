@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class WeatherListModel {
     public List<WeatherModel> weatherList;
-    public int numDays;
     public String city;
     public String state;
     public boolean refreshSelect;

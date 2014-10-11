@@ -1,17 +1,13 @@
 package com.android.weether;
 
-import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.weether.task.LoadWeatherTask;
-import com.android.weether.util.GeoCode;
+import com.android.weether.util.GeocodeUtil;
+import com.android.weether.util.NetworkUtil;
 import com.loopj.android.image.SmartImageView;
 
 import java.util.ArrayList;
@@ -38,33 +35,28 @@ import java.util.Locale;
  */
 public class WeatherListActivity extends ListActivity {
     private static final String TAG = "WeatherListActivity";
+    private SharedPreferences mDays;
+    private SharedPreferences mTemp;
+    private SharedPreferences mLocation;
     private Context mContext = this;
-
-    private String mCity;
-    private String mState;
-    private TextView mBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weatherlist);
 
-        Log.d(TAG, "onCreate method - WeatherListActivity");
+        mDays = getSharedPreferences("DAYS", 0);
+        mTemp = getSharedPreferences("TEMP", 0);
+        mLocation = getSharedPreferences("LOCATIONS", 0);
 
-        SharedPreferences days = getSharedPreferences("DAYS", 0);
-        int numDays = days.getInt("num_days", 3) - 1;
+        TextView mBanner = (TextView) findViewById(R.id.banner);
+        mBanner.setText("CURRENT AND NEXT " + (mDays.getInt("num_days", 3)-1) + " DAYS");
 
-        mBanner = (TextView) findViewById(R.id.banner);
-        mBanner.setText("CURRENT AND NEXT " + numDays + " DAYS");
+        List<WeatherModel> weatherModelTemp = new ArrayList<WeatherModel>();
+        for(int i = 0; i < mDays.getInt("num_days", 3); i++)
+            weatherModelTemp.add(WeatherListModel.instance().weatherList.get(i));
 
-        List<WeatherModel> weatherModel = new ArrayList<WeatherModel>();
-        for(int i = 0; i <= numDays; i++){
-            weatherModel.add(WeatherListModel.instance().weatherList.get(i));
-        }
-
-        WeatherListAdapter adapter =
-                new WeatherListAdapter(this, weatherModel);
-
+        WeatherListAdapter adapter = new WeatherListAdapter(this, weatherModelTemp);
         setListAdapter(adapter);
     }
 
@@ -76,11 +68,7 @@ public class WeatherListActivity extends ListActivity {
             super(context, R.layout.weather_row, models);
             mWeatherModels = models;
             mContext = context;
-
         }
-
-        SharedPreferences temp = getSharedPreferences("TEMP", 0);
-        String temp_type = temp.getString("temp_type", "Farenheit");
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -101,7 +89,7 @@ public class WeatherListActivity extends ListActivity {
             dayTextView.setText(weatherModel.getWeekday());
             descriptionTextView.setText(weatherModel.getConditions());
 
-            if(temp_type.equals("Farenheit")) {
+            if((mTemp.getString("temp_type", "Farenheit")).equals("Farenheit")) {
                 tempHighTextView.setText(String.valueOf(weatherModel.getTempHighF()) + "°F");
                 tempLowTextView.setText(String.valueOf(weatherModel.getTempLowF()) + "°F");
             }
@@ -117,38 +105,27 @@ public class WeatherListActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.weather_list_activity, menu);
-        ActionBar ab = getActionBar();
-
-        if(!WeatherListModel.instance().refreshSelect) {
-            SharedPreferences location = getSharedPreferences("LOCATIONS", 0);
-            WeatherListModel.instance().city = location.getString("city", WeatherListModel.instance().city);
-            WeatherListModel.instance().state = location.getString("state", WeatherListModel.instance().state);
-        }
-
-        mCity = WeatherListModel.instance().city;
-        mState = WeatherListModel.instance().state;
-        ab.setTitle(mCity + ", " + mState);
-
-        Drawable d = getResources().getDrawable(R.drawable.weather_background);
-        ab.setBackgroundDrawable(d);
+        getActionBar().setTitle(mLocation.getString("city", "none") + ", " + mLocation.getString("state", "none"));
+        getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.weather_background));
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch(id){
+        switch(item.getItemId()){
             case R.id.action_settings:
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 return true;
             case R.id.action_place:
+                if(!NetworkUtil.isOnline(mContext)) {
+                    Toast.makeText(mContext.getApplicationContext(), "Internet Access Not Found", Toast.LENGTH_LONG).show();
+                    return true;
+                }
                 Toast.makeText(mContext.getApplicationContext(), "Fetching weather for current location...", Toast.LENGTH_LONG).show();
                 refreshFeed();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -157,49 +134,45 @@ public class WeatherListActivity extends ListActivity {
         LocationListener mlocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                GeoCode geocode = new GeoCode(getApplicationContext(), Locale.getDefault());
+                GeocodeUtil geocode = new GeocodeUtil(getApplicationContext(), Locale.getDefault());
 
-                if(WeatherListModel.instance().city.equals(geocode.find(location).get(0).getLocality())){
-                        Toast.makeText(mContext.getApplicationContext(), "Weather already set for current location", Toast.LENGTH_LONG).show();
+                if(mLocation.getString("city", "none").equals(geocode.find(location).get(0).getLocality())) {
+                    Toast.makeText(mContext.getApplicationContext(), "Weather already set for current location", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    WeatherListModel.instance().city = geocode.find(location).get(0).getLocality();
-                    WeatherListModel.instance().state = geocode.find(location).get(0).getAdminArea();
-                    WeatherListModel.instance().refreshSelect = true;
+                    SharedPreferences.Editor editor = mLocation.edit();
+                    editor.putString("cite", geocode.find(location).get(0).getLocality());
+                    editor.putString("state", geocode.find(location).get(0).getAdminArea());
+                    editor.apply();
 
                     String WEATHER_URL = "http://api.wunderground.com/api/cd73277d18704fa9/forecast10day/q/" +
                             String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + ".json";
-
-                    Log.d("TAG", "Weather URL = " + WEATHER_URL);
 
                     LoadWeatherTask mLoadWeatherTask = new LoadWeatherTask(mContext, true);
                     mLoadWeatherTask.execute(WEATHER_URL);
                 }
             }
-
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {}
             @Override
             public void onProviderEnabled(String s) {}
             @Override
             public void onProviderDisabled(String s) {
-                Log.d(TAG, "Location services NOT enabled");
             }
         };
-
         mlocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, mlocationListener, null);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        // Quit if back is pressed
-        if (keyCode == KeyEvent.KEYCODE_BACK)
-        {
-            moveTaskToBack(true);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event)
+//    {
+//        // Quit if back is pressed
+//        if (keyCode == KeyEvent.KEYCODE_BACK)
+//        {
+//            moveTaskToBack(true);
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
 }

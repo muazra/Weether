@@ -35,35 +35,26 @@ import java.util.List;
  */
 public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherModel>> {
     private static final String TAG = "LoadWeatherTask";
-    private Context mContext;
-    private Boolean mFetchCurrent;
     private ProgressDialog mProgressDialog;
+    private Context mContext;
+    private Boolean mShowDialog;
 
     public LoadWeatherTask(Context context, Boolean fetchCurrent){
         mContext = context;
-        mFetchCurrent = fetchCurrent;
+        mShowDialog = fetchCurrent;
     }
 
     @Override
     protected void onPreExecute(){
-        if(mFetchCurrent){
+        if(mShowDialog)
             mProgressDialog = mProgressDialog.show(mContext,"Loading...","Please wait...",false);
-        }
     }
-
 
     @Override
     protected List<WeatherModel> doInBackground(String... params){
         return fetchContent(params[0]);
     }
 
-    /**
-     * Method to fetch the Weather content
-     *
-     * @param URL
-     *           :  String URL to make the HTTP request
-     * @return List Containing Weather class objects
-     */
     private List<WeatherModel> fetchContent(String URL){
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(URL);
@@ -78,13 +69,6 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
         return null;
     }
 
-    /**
-     * Method to convert the received input stream data to String
-     *
-     * @param is
-     *          :  Input stream received as HTTP response
-     * @return : Converted String
-     */
     private String buildString(InputStream is){
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder builder = new StringBuilder();
@@ -99,13 +83,6 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
         return builder.toString();
     }
 
-    /**
-     * Parse JSON string
-     *
-     * @param jsonString
-     *            :  String received as response from URL
-     * @return : List of type Article
-     */
     private List<WeatherModel> parseJSON(String jsonString){
         List<WeatherModel> weatherList = new ArrayList<WeatherModel>();
 
@@ -145,14 +122,16 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
     protected void onPostExecute(List<WeatherModel> result) {
         WeatherListModel.instance().weatherList = result;
 
-        if(mFetchCurrent){
-            Toast.makeText(mContext.getApplicationContext(), "Weather set for current location", Toast.LENGTH_LONG).show();
+        if(mShowDialog){
+            Toast.makeText(mContext.getApplicationContext(), "Weather for current location displayed", Toast.LENGTH_LONG).show();
             mProgressDialog.dismiss();
         }
 
-        Intent i = new Intent(mContext.getApplicationContext(), WeatherListActivity.class);
+        Intent i = new Intent(mContext, WeatherListActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.getApplicationContext().startActivity(i);
+        i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        mContext.startActivity(i);
     }
 
 }

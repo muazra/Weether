@@ -8,13 +8,7 @@ import java.util.List;
  */
 public class WeatherListModel {
     public List<WeatherModel> weatherList;
-    public String city;
-    public String state;
-    public boolean refreshSelect;
-
-    private WeatherListModel() {
-        refreshSelect = false;
-    }
+    private WeatherListModel() {}
 
     static WeatherListModel obj = null;
     public static synchronized WeatherListModel instance() {

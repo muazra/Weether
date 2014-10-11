@@ -12,11 +12,11 @@ import java.util.Locale;
 /**
  * Created by Muaz on 10/7/14.
  */
-public class GeoCode {
+public class GeocodeUtil {
 
     private Geocoder mGeocoder;
 
-    public GeoCode(Context context, Locale locale){
+    public GeocodeUtil(Context context, Locale locale){
         mGeocoder = new Geocoder(context, locale);
     }
 

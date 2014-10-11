@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#555555">
+
+    <LinearLayout
+        android:id="@+id/settings_days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:textSize="18dp"
+            android:text="@string/days_displayed"
+            android:textColor="@android:color/white"
+            android:gravity="left|center"
+            android:paddingLeft="15dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_days"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:gravity="center"
+            android:entries="@array/display_days">
+            </Spinner>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/current_default_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"
+            android:gravity="left|center"/>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/settings_temp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:textSize="18dp"
+            android:text="@string/temp_type"
+            android:textColor="@android:color/white"
+            android:gravity="left|center"
+            android:paddingLeft="15dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_temp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:gravity="center"
+            android:entries="@array/temp_type">
+        </Spinner>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/current_default_temp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"
+            android:gravity="left|center"/>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/settings_zipcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:textSize="18dp"
+            android:text="@string/set_location"
+            android:textColor="@android:color/white"
+            android:gravity="left|center"
+            android:paddingLeft="15dp"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/settings_location_hint"
+            android:layout_weight="0.7"
+            android:textSize="18dp"
+            android:id="@+id/enter_zipcode"
+            android:gravity="center"
+            />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/current_default_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:textSize="15dp"
+            android:gravity="left|center"/>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/settings_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+
+        <Button
+            android:id="@+id/cancel_settings"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_settings"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/clear_defaults_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/clear_defaults"/>
+
+        <Button
+            android:id="@+id/save_settings"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/save_settings"
+            android:gravity="center"
+            />
+
+        </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
+
+</LinearLayout>

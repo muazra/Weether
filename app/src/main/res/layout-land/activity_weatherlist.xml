@@ -12,8 +12,8 @@
         android:id="@+id/banner"
         android:gravity="center"
         android:textSize="15sp"
-        android:textStyle="bold"
         android:textColor="@android:color/black"
+        android:textStyle="bold"
         android:padding="15dp"
         />
 

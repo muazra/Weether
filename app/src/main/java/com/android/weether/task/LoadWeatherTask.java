@@ -50,7 +50,7 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
         if(mShowDialog) {
             mProgressDialog = new ProgressDialog(mContext, ProgressDialog.THEME_HOLO_DARK);
             mProgressDialog.setTitle(R.string.loading_dialog);
-            mProgressDialog.setMessage(String.valueOf(R.string.waiting_dialog));
+            mProgressDialog.setMessage(mContext.getString(R.string.waiting_dialog));
             mProgressDialog.show();
         }
     }

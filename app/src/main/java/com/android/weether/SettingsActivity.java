@@ -158,7 +158,7 @@ public class SettingsActivity extends Activity {
     private AlertDialog.Builder buildClearDefaultsDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_DARK);
         builder.setTitle(R.string.confirmation);
-        builder.setMessage(String.valueOf(R.string.confirmation_clear_defaults));
+        builder.setMessage(mContext.getString(R.string.confirmation_clear_defaults));
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {}
         });

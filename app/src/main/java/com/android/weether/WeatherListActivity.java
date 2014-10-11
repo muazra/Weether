@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import java.util.Locale;
 
 /**
  * Class to display fetched weather content
- * in custom ListView.
+ * in custom listView.
  *
  * @author Muaz Rahman
  *
@@ -86,10 +87,10 @@ public class WeatherListActivity extends ListActivity {
             TextView descriptionTextView = (TextView) weatherRow.findViewById(R.id.description);
 
             imageView.setImageUrl(weatherModel.getIconURL());
-            dayTextView.setText(weatherModel.getWeekday());
+            dayTextView.setText(weatherModel.getWeekday().toUpperCase());
             descriptionTextView.setText(weatherModel.getConditions());
 
-            if((mTemp.getString("temp_type", "Farenheit")).equals("Farenheit")) {
+            if((mTemp.getString("temp_type", "Fahrenheit")).equals("Fahrenheit")) {
                 tempHighTextView.setText(String.valueOf(weatherModel.getTempHighF()) + "°F");
                 tempLowTextView.setText(String.valueOf(weatherModel.getTempLowF()) + "°F");
             }
@@ -105,8 +106,17 @@ public class WeatherListActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.weather_list_activity, menu);
-        getActionBar().setTitle(mLocation.getString("city", "none") + ", " + mLocation.getString("state", "none"));
-        getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.weather_background));
+
+        if(mLocation.getBoolean("refresh_select", false))
+            getActionBar().setTitle(mLocation.getString("city_current", "none") + ", " +
+                    mLocation.getString("state_current", "none"));
+        else
+            getActionBar().setTitle(mLocation.getString("city", "none") + ", " + mLocation.getString("state", "none"));
+
+        SharedPreferences.Editor editor = mLocation.edit();
+        editor.putBoolean("refresh_select", false);
+        editor.commit();
+
         return true;
     }
 
@@ -119,10 +129,12 @@ public class WeatherListActivity extends ListActivity {
                 return true;
             case R.id.action_place:
                 if(!NetworkUtil.isOnline(mContext)) {
-                    Toast.makeText(mContext.getApplicationContext(), "Internet Access Not Found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext.getApplicationContext(), R.string.internet_disabled,
+                            Toast.LENGTH_LONG).show();
                     return true;
                 }
-                Toast.makeText(mContext.getApplicationContext(), "Fetching weather for current location...", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext.getApplicationContext(), R.string.fetch_current_weather,
+                        Toast.LENGTH_LONG).show();
                 refreshFeed();
                 return true;
         }
@@ -137,16 +149,20 @@ public class WeatherListActivity extends ListActivity {
                 GeocodeUtil geocode = new GeocodeUtil(getApplicationContext(), Locale.getDefault());
 
                 if(mLocation.getString("city", "none").equals(geocode.find(location).get(0).getLocality())) {
-                    Toast.makeText(mContext.getApplicationContext(), "Weather already set for current location", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext.getApplicationContext(), R.string.weather_set_current,
+                            Toast.LENGTH_LONG).show();
                 }
                 else {
                     SharedPreferences.Editor editor = mLocation.edit();
-                    editor.putString("cite", geocode.find(location).get(0).getLocality());
-                    editor.putString("state", geocode.find(location).get(0).getAdminArea());
+                    editor.putBoolean("refresh_select", true);
+                    editor.putString("city_current", geocode.find(location).get(0).getLocality());
+                    editor.putString("state_current", geocode.find(location).get(0).getAdminArea());
+
                     editor.apply();
 
                     String WEATHER_URL = "http://api.wunderground.com/api/cd73277d18704fa9/forecast10day/q/" +
-                            String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + ".json";
+                            String.valueOf(location.getLatitude()) + "," +
+                            String.valueOf(location.getLongitude()) + ".json";
 
                     LoadWeatherTask mLoadWeatherTask = new LoadWeatherTask(mContext, true);
                     mLoadWeatherTask.execute(WEATHER_URL);
@@ -163,16 +179,16 @@ public class WeatherListActivity extends ListActivity {
         mlocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, mlocationListener, null);
     }
 
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event)
-//    {
-//        // Quit if back is pressed
-//        if (keyCode == KeyEvent.KEYCODE_BACK)
-//        {
-//            moveTaskToBack(true);
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        // Quit if back is pressed
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

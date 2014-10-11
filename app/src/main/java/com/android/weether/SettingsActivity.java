@@ -6,9 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,9 +18,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.weether.task.GetLocationTask;
 import com.android.weether.task.LoadWeatherTask;
-import com.android.weether.util.GeocodeUtil;
+import com.android.weether.util.NetworkUtil;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -37,7 +36,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Locale;
 
 /**
  * Class to display settings options.
@@ -94,9 +92,11 @@ public class SettingsActivity extends Activity {
 
         setupDefaults();
         setupSpinners();
+        setupButtons();
 
+    }
 
-
+    private void setupButtons(){
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,7 +109,12 @@ public class SettingsActivity extends Activity {
         mClearDefaults.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buildClearDefaultsDialog().show();
+                if(!NetworkUtil.isOnline(mContext)) {
+                    Toast.makeText(mContext.getApplicationContext(), R.string.internet_disabled_clear,
+                            Toast.LENGTH_LONG).show();
+                }else {
+                    buildClearDefaultsDialog().show();
+                }
             }
 
         });
@@ -118,68 +123,42 @@ public class SettingsActivity extends Activity {
             @Override
             public void onClick(View view) {
                 hideKeyboard();
-                buildSaveDialog().show();
+                if(!NetworkUtil.isOnline(mContext)) {
+                    Toast.makeText(mContext.getApplicationContext(), R.string.internet_disabled_save,
+                            Toast.LENGTH_LONG).show();
+                }else {
+                    AlertDialog dialog = buildSaveDialog().show();
+                    TextView textView = (TextView) dialog.findViewById(android.R.id.message);
+                    textView.setTextSize(17);
+                }
             }
         });
-
     }
 
     private void commitClearDefaultsChanges(){
         SharedPreferences.Editor editor = mDays.edit();
         editor.putInt("num_days", 3);
         mDefaultDays.setText("Default: 3");
-        editor.commit();
+        editor.apply();
 
         editor = mTemp.edit();
-        editor.putString("temp_type", "Farenheit");
-        mDefaultTemp.setText("Default: Farenheit");
-        editor.commit();
+        editor.putString("temp_type", "Fahrenheit");
+        mDefaultTemp.setText("Default: Fahrenheit");
+        editor.apply();
 
         editor = mLocation.edit();
         editor.putBoolean("locations_exist", false);
         mDefaultLocation.setText("Default: Current Location");
-        editor.commit();
+        editor.apply();
 
         mEnterZipcode.setText("");
-
-        serveCurrentLocation();
-
-    }
-
-    private void serveCurrentLocation(){
-        LocationManager mlocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener mlocationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                GeocodeUtil geocode = new GeocodeUtil(getApplicationContext(), Locale.getDefault());
-
-                SharedPreferences.Editor editor = mLocation.edit();
-                editor.putString("city", geocode.find(location).get(0).getLocality());
-                editor.putString("state", geocode.find(location).get(0).getAdminArea());
-                editor.commit();
-
-                String WEATHER_URL = "http://api.wunderground.com/api/cd73277d18704fa9/forecast10day/q/" +
-                        String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + ".json";
-
-                LoadWeatherTask LoadWeatherTask = new LoadWeatherTask(mContext, false);
-                LoadWeatherTask.execute(WEATHER_URL);
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {}
-            @Override
-            public void onProviderEnabled(String s) {}
-            @Override
-            public void onProviderDisabled(String s) {}
-        };
-        mlocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, mlocationListener, null);
-
+        new GetLocationTask(mContext).serveCurrentLocation();
     }
 
     private AlertDialog.Builder buildClearDefaultsDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_DARK);
-        builder.setTitle("Confirmation");
-        builder.setMessage("Are you sure you want to clear all defaults to factory setting?");
+        builder.setTitle(R.string.confirmation);
+        builder.setMessage(String.valueOf(R.string.confirmation_clear_defaults));
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {}
         });
@@ -198,19 +177,19 @@ public class SettingsActivity extends Activity {
     private void commitSaveChanges(){
         mProgressBar.setVisibility(View.VISIBLE);
 
-        SharedPreferences.Editor editor = mDays.edit();
-        editor.putInt("num_days", daysSelected);
-        editor.commit();
-
-        editor = mTemp.edit();
-        editor.putString("temp_type", tempSelected);
-        editor.commit();
-
         if(!(mEnterZipcode.getText().toString()).equals("")){
             ZipcodeLookup zipLookup = new ZipcodeLookup();
             zipLookup.execute(mEnterZipcode.getText().toString());
         }
         else {
+            SharedPreferences.Editor editor = mDays.edit();
+            editor.putInt("num_days", daysSelected);
+            editor.apply();
+
+            editor = mTemp.edit();
+            editor.putString("temp_type", tempSelected);
+            editor.apply();
+
             Intent intent = new Intent(mContext, WeatherListActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -221,7 +200,7 @@ public class SettingsActivity extends Activity {
 
     private AlertDialog.Builder buildSaveDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_DARK);
-        builder.setTitle("Confirm Settings");
+        builder.setTitle(R.string.confirmation_settings);
         builder.setMessage("Days Displayed = " + daysSelected + "\nTemperature Type = " + tempSelected +
                 "\nWeather Location = " + getLocationMessage());
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -230,7 +209,8 @@ public class SettingsActivity extends Activity {
             }
         });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {}
+            public void onClick(DialogInterface dialog, int which) {
+            }
         });
         builder.setIcon(R.drawable.ic_action_warning);
         return builder;
@@ -256,7 +236,7 @@ public class SettingsActivity extends Activity {
                     mLocation.getString("state", "none"));
 
         mDefaultDays.setText("Default: " + mDays.getInt("num_days", 3));
-        mDefaultTemp.setText("Default: " + mTemp.getString("temp_type", "Farenheit"));
+        mDefaultTemp.setText("Default: " + mTemp.getString("temp_type", "Fahrenheit"));
     }
 
     private void setupSpinners(){
@@ -281,7 +261,7 @@ public class SettingsActivity extends Activity {
     }
 
     private class ZipcodeLookup extends AsyncTask<String, Void, String>{
-        SharedPreferences.Editor editor = mLocation.edit();
+        SharedPreferences.Editor editor;
         @Override
         protected String doInBackground(String... params){
             String URL = "http://api.wunderground.com/api/cd73277d18704fa9/geolookup/q/" + params[0] + ".json";
@@ -320,9 +300,19 @@ public class SettingsActivity extends Activity {
             try{
                 JSONObject respJson = new JSONObject(jsonString).getJSONObject("location");
 
+                editor = mLocation.edit();
                 editor.putBoolean("locations_exist", true);
                 editor.putString("city", respJson.getString("city"));
                 editor.putString("state", respJson.getString("state"));
+                editor.apply();
+
+                editor = mDays.edit();
+                editor.putInt("num_days", daysSelected);
+                editor.apply();
+
+                editor = mTemp.edit();
+                editor.putString("temp_type", tempSelected);
+                editor.apply();
 
             }catch(JSONException e){
                 e.printStackTrace();
@@ -332,8 +322,9 @@ public class SettingsActivity extends Activity {
         @Override
         protected void onPostExecute(String zipcode){
             String URL = "http://api.wunderground.com/api/cd73277d18704fa9/forecast10day/q/" + zipcode + ".json";
+            editor = mLocation.edit();
             editor.putString("weather_url", URL);
-            editor.commit();
+            editor.apply();
 
             LoadWeatherTask loadWeatherTask = new LoadWeatherTask(mContext, false);
             loadWeatherTask.execute(URL);

@@ -1,11 +1,14 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Muaz">
     <words>
+      <w>currentlocation</w>
       <w>farenheit</w>
+      <w>forecastday</w>
       <w>geocoder</w>
       <w>geolookup</w>
       <w>mlocation</w>
       <w>monthname</w>
+      <w>savedlocation</w>
       <w>zipcode</w>
     </words>
   </dictionary>

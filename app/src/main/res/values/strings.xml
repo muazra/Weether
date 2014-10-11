@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">WEETHER</string>
+    <string name="app_name">Weether</string>
     <string name="action_settings">Settings</string>
     <string name="action_place">Current Location</string>
 
-    <string name="splash_currentlocation">Loading weather for current location...</string>
-    <string name="splash_savedlocation">Loading weather for saved location...</string>
+    <string name="splash_currentlocation">Loading weather for current location</string>
+    <string name="splash_savedlocation">Loading weather for saved location</string>
+
     <string name="days_displayed">Days Displayed</string>
     <string name="temp_type">Temperature Type</string>
     <string name="set_location">Weather Location</string>
+    <string name="settings_location_hint">Enter Zipcode</string>
+
     <string name="cancel_settings">Cancel</string>
     <string name="save_settings">Save</string>
-    <string name="settings_location_hint">Enter Zipcode</string>
     <string name="clear_defaults">Clear All Defaults</string>
+
+    <string name="internet_disabled">Internet access disabled. Please try again later.</string>
+    <string name="fetch_current_weather">Fetching weather for current location</string>
+    <string name="weather_set_current">Weather already set for current location</string>
+    <string name="current_weather_displayed">Weather for current location displayed</string>
+
+    <string name="internet_disabled_title">Internet Access Disabled</string>
+    <string name="enable_internet_message">Please enable and try again</string>
+
+    <string name="internet_disabled_clear">Internet access disabled. Changes cannot be cleared.</string>
+    <string name="internet_disabled_save">Internet access disabled. Changes cannot be saved.</string>
+
+    <string name="confirmation">Confirmation</string>
+    <string name="confirmation_clear_defaults">Are you sure you want to clear all defaults to factory setting?</string>
+
+    <string name="confirmation_settings">Confirm settings</string>
+
+    <string name="loading_dialog">Loading..</string>
+    <string name="waiting_dialog">Please wait..</string>
 
     <string-array name="display_days">
         <item>3</item><item>4</item><item>5</item><item>6</item>
@@ -21,7 +42,7 @@
     </string-array>
 
     <string-array name="temp_type">
-        <item>Farenheit</item>
+        <item>Fahrenheit</item>
         <item>Celsius</item>
     </string-array>
 

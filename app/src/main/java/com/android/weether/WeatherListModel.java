@@ -3,7 +3,7 @@ package com.android.weether;
 import java.util.List;
 
 /**
- * Singleton class for weather list and weather address
+ * Singleton class for list of WeatherModels.
  * @author Muaz Rahman
  */
 public class WeatherListModel {

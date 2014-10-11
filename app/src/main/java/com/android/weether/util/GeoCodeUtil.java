@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Muaz on 10/7/14.
+ * Class to get address of user location
+ * based on latitude and longitude coordinates
+ *
+ * @author Muaz Rahman
+ *
  */
 public class GeocodeUtil {
 

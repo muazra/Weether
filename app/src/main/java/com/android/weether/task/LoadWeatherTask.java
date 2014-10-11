@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.android.weether.R;
 import com.android.weether.WeatherListActivity;
 import com.android.weether.WeatherListModel;
 import com.android.weether.WeatherModel;
@@ -46,8 +47,12 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
 
     @Override
     protected void onPreExecute(){
-        if(mShowDialog)
-            mProgressDialog = mProgressDialog.show(mContext,"Loading...","Please wait...",false);
+        if(mShowDialog) {
+            mProgressDialog = new ProgressDialog(mContext, ProgressDialog.THEME_HOLO_DARK);
+            mProgressDialog.setTitle(R.string.loading_dialog);
+            mProgressDialog.setMessage(String.valueOf(R.string.waiting_dialog));
+            mProgressDialog.show();
+        }
     }
 
     @Override
@@ -88,7 +93,8 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
 
         try{
             JSONObject respJson = new JSONObject(jsonString);
-            JSONArray jsonArray = respJson.getJSONObject("forecast").getJSONObject("simpleforecast").getJSONArray("forecastday");
+            JSONArray jsonArray = respJson.getJSONObject("forecast").getJSONObject("simpleforecast").
+                    getJSONArray("forecastday");
             JSONObject jsonObject;
 
             for(int i = 0; i < jsonArray.length(); i++) {
@@ -123,7 +129,8 @@ public class LoadWeatherTask extends AsyncTask<String, Integer, List<WeatherMode
         WeatherListModel.instance().weatherList = result;
 
         if(mShowDialog){
-            Toast.makeText(mContext.getApplicationContext(), "Weather for current location displayed", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext.getApplicationContext(), R.string.current_weather_displayed,
+                    Toast.LENGTH_LONG).show();
             mProgressDialog.dismiss();
         }
 

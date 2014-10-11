@@ -5,7 +5,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by Muaz on 10/10/14.
+ * Class to determine whether or not
+ * user has internet connection.
+ *
+ * @author Muaz Rahman
+ *
  */
 public class NetworkUtil {
 

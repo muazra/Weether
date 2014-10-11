@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Weether</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="action_place">Ubicación actual</string>
+
+    <string name="splash_currentlocation">Cargando tiempo para la ubicación actual</string>
+    <string name="splash_savedlocation">Cargando tiempo para ubicación guardada</string>
+
+    <string name="days_displayed">días Demostraciones</string>
+    <string name="temp_type">Tipo Temperatura</string>
+    <string name="set_location">Tiempo Ubicación</string>
+    <string name="settings_location_hint">Ingresar código postal</string>
+
+    <string name="cancel_settings">Cancelar</string>
+    <string name="save_settings">Guardar</string>
+    <string name="clear_defaults">Desactive todas las opciones predeterminadas</string>
+
+    <string name="internet_disabled">Acceso a internet desactivado. Por favor, inténtelo de nuevo más tarde.</string>
+    <string name="fetch_current_weather">Obtención de tiempo para la ubicación actual</string>
+    <string name="weather_set_current">El tiempo ya establecido para la ubicación actual</string>
+    <string name="current_weather_displayed">El tiempo para la ubicación actual aparece</string>
+
+    <string name="internet_disabled_title">Acceso a Internet para discapacitados</string>
+    <string name="enable_internet_message">Por favor, activa y vuelva a intentarlo</string>
+
+    <string name="internet_disabled_clear">Acceso a internet desactivado. Los cambios no se pueden borrar.</string>
+    <string name="internet_disabled_save">Acceso a internet desactivado. Los cambios no se pueden guardar.</string>
+
+    <string name="confirmation">Confirmación</string>
+    <string name="confirmation_clear_defaults">¿Seguro que desea borrar todos los valores predeterminados de configuración de fábrica?</string>
+
+    <string name="confirmation_settings">confirme los ajustes</string>
+
+    <string name="loading_dialog">Cargando..</string>
+    <string name="waiting_dialog">por favor espera..</string>
+
+    <string-array name="display_days">
+        <item>3</item><item>4</item><item>5</item><item>6</item>
+        <item>7</item><item>8</item><item>9</item><item>10</item>
+    </string-array>
+
+    <string-array name="temp_type">
+        <item>Fahrenheit</item>
+        <item>Celsius</item>
+    </string-array>
+
+</resources>

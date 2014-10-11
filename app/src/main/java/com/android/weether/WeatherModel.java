@@ -19,7 +19,6 @@ public class WeatherModel {
     private int tempHighC;
     private int tempLowC;
 
-
     public String getWeekday() {
         return weekday;
     }

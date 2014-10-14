@@ -96,6 +96,56 @@ public class SettingsActivity extends Activity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                Intent intent = new Intent(this, WeatherListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupDefaults(){
+        if(!mLocation.getBoolean("locations_exist", false))
+            mDefaultLocation.setText("Default: Current Location");
+        else
+            mDefaultLocation.setText("Default: " + mLocation.getString("city", "none") + "," +
+                    mLocation.getString("state", "none"));
+
+        mDefaultDays.setText("Default: " + mDays.getInt("num_days", 3));
+        mDefaultTemp.setText("Default: " + mTemp.getString("temp_type", "Fahrenheit"));
+    }
+
+    private void setupSpinners(){
+        mSpinnerDays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String day = (String) adapterView.getItemAtPosition(i);
+                daysSelected = Integer.parseInt(day);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+
+        mSpinnerTemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                tempSelected = (String) adapterView.getItemAtPosition(i);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+    }
+
     private void setupButtons(){
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +210,8 @@ public class SettingsActivity extends Activity {
         builder.setTitle(R.string.confirmation);
         builder.setMessage(mContext.getString(R.string.confirmation_clear_defaults));
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {}
+            public void onClick(DialogInterface dialog, int id) {
+            }
         });
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -214,50 +265,6 @@ public class SettingsActivity extends Activity {
         });
         builder.setIcon(R.drawable.ic_action_warning);
         return builder;
-    }
-
-    private String getLocationMessage(){
-        if(mEnterZipcode.getText().toString().equals("")){
-            if(mLocation.getBoolean("locations_exist", false))
-                return mLocation.getString("city", "none") + ", " +
-                        mLocation.getString("state", "none");
-            else {
-                return "Current Location";
-            }
-        }else
-            return mEnterZipcode.getText().toString();
-    }
-
-    private void setupDefaults(){
-        if(!mLocation.getBoolean("locations_exist", false))
-            mDefaultLocation.setText("Default: Current Location");
-        else
-            mDefaultLocation.setText("Default: " + mLocation.getString("city", "none") + "," +
-                    mLocation.getString("state", "none"));
-
-        mDefaultDays.setText("Default: " + mDays.getInt("num_days", 3));
-        mDefaultTemp.setText("Default: " + mTemp.getString("temp_type", "Fahrenheit"));
-    }
-
-    private void setupSpinners(){
-        mSpinnerDays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String day = (String) adapterView.getItemAtPosition(i);
-                daysSelected = Integer.parseInt(day);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
-
-        mSpinnerTemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tempSelected = (String) adapterView.getItemAtPosition(i);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
     }
 
     private class ZipcodeLookup extends AsyncTask<String, Void, String>{
@@ -331,22 +338,16 @@ public class SettingsActivity extends Activity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case android.R.id.home:
-                Intent intent = new Intent(this, WeatherListActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    private String getLocationMessage(){
+        if(mEnterZipcode.getText().toString().equals("")){
+            if(mLocation.getBoolean("locations_exist", false))
+                return mLocation.getString("city", "none") + ", " +
+                        mLocation.getString("state", "none");
+            else {
+                return "Current Location";
+            }
+        }else
+            return mEnterZipcode.getText().toString();
     }
 
     private void hideKeyboard() {

@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,6 +46,8 @@ public class WeatherListActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weatherlist);
+
+        Log.d(TAG, "WeatherListActivity onCreate");
 
         mDays = getSharedPreferences("DAYS", 0);
         mTemp = getSharedPreferences("TEMP", 0);

@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.android.weether.util.GeocodeUtil;
 
@@ -34,6 +35,8 @@ public class GetLocationTask {
             @Override
             public void onLocationChanged(Location location) {
                 GeocodeUtil geocode = new GeocodeUtil(mContext.getApplicationContext(), Locale.getDefault());
+
+                Log.d("GetLocationTask", "Location found");
 
                 SharedPreferences.Editor editor = mLocation.edit();
                 editor.putBoolean("locations_exist", false);

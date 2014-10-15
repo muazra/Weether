@@ -33,6 +33,9 @@
 
     <string name="confirmation_settings">Confirm settings</string>
 
+    <string name="zipcode_not_found">Zipcode Not Found</string>
+    <string name="zipcode_message">No changes saved. Please start over and try again.</string>
+
     <string name="loading_dialog">Loading..</string>
     <string name="waiting_dialog">Please wait..</string>
 

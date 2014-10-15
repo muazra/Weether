@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -305,7 +306,14 @@ public class SettingsActivity extends Activity {
 
         private void parseJSON(String jsonString){
             try{
-                JSONObject respJson = new JSONObject(jsonString).getJSONObject("location");
+                JSONObject respJson = new JSONObject(jsonString);
+
+                if(respJson.getJSONObject("response").has("error")){
+                    Log.d(TAG, "ZIPCODE ERROR !");
+                    buildZipcodeErrorDialog().show();
+                }
+
+                respJson = respJson.getJSONObject("location");
 
                 editor = mLocation.edit();
                 editor.putBoolean("locations_exist", true);
@@ -336,6 +344,21 @@ public class SettingsActivity extends Activity {
             LoadWeatherTask loadWeatherTask = new LoadWeatherTask(mContext, false);
             loadWeatherTask.execute(URL);
         }
+    }
+
+    private AlertDialog.Builder buildZipcodeErrorDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_DARK);
+        builder.setTitle(R.string.zipcode_not_found);
+        builder.setMessage(R.string.zipcode_message);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(mContext, SettingsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+        builder.setIcon(R.drawable.ic_action_warning);
+        return builder;
     }
 
     private String getLocationMessage(){

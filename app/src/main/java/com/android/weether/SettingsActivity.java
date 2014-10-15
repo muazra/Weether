@@ -310,7 +310,14 @@ public class SettingsActivity extends Activity {
 
                 if(respJson.getJSONObject("response").has("error")){
                     Log.d(TAG, "ZIPCODE ERROR !");
-                    buildZipcodeErrorDialog().show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            buildZipcodeErrorDialog().show();
+                        }
+                    });
+
+                    this.cancel(true);
                 }
 
                 respJson = respJson.getJSONObject("location");

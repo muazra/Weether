@@ -54,7 +54,9 @@ public class WeatherListActivity extends ListActivity {
         mLocation = getSharedPreferences("LOCATIONS", 0);
 
         TextView mBanner = (TextView) findViewById(R.id.banner);
-        mBanner.setText("CURRENT AND NEXT " + (mDays.getInt("num_days", 3)-1) + " DAYS");
+        String bannerText = getText(R.string.current_and_next) + " " + (mDays.getInt("num_days", 3)-1)
+                + " " + getText(R.string.days);
+        mBanner.setText(bannerText);
 
         List<WeatherModel> weatherModelTemp = new ArrayList<WeatherModel>();
         for(int i = 0; i < mDays.getInt("num_days", 3); i++)

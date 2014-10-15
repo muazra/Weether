@@ -58,7 +58,7 @@ public class SplashActivity extends Activity {
     private AlertDialog.Builder buildDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_DARK);
         builder.setTitle(R.string.internet_disabled_title);
-        builder.setMessage(String.valueOf(R.string.enable_internet_message));
+        builder.setMessage(R.string.enable_internet_message);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 System.exit(0);

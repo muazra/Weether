@@ -8,7 +8,10 @@
     <string name="splash_currentlocation">Cargando tiempo para la ubicación actual</string>
     <string name="splash_savedlocation">Cargando tiempo para ubicación guardada</string>
 
-    <string name="days_displayed">días Demostraciones</string>
+    <string name="current_and_next">Actual y la siguiente</string>
+    <string name="days">Días</string>
+
+    <string name="days_displayed">Días Demostraciones</string>
     <string name="temp_type">Tipo Temperatura</string>
     <string name="set_location">Tiempo Ubicación</string>
     <string name="settings_location_hint">Ingresar código postal</string>
@@ -32,6 +35,9 @@
     <string name="confirmation_clear_defaults">¿Seguro que desea borrar todos los valores predeterminados de configuración de fábrica?</string>
 
     <string name="confirmation_settings">confirme los ajustes</string>
+
+    <string name="zipcode_not_found">Código postal Not Found</string>
+    <string name="zipcode_message">No hay cambios guardan. Por favor, empezar de nuevo y vuelve a intentarlo .</string>
 
     <string name="loading_dialog">Cargando..</string>
     <string name="waiting_dialog">por favor espera..</string>

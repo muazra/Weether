@@ -17,6 +17,9 @@
     <string name="save_settings">Save</string>
     <string name="clear_defaults">Clear All Defaults</string>
 
+    <string name="current_and_next">CURRENT AND NEXT</string>
+    <string name="days">DAYS</string>
+
     <string name="internet_disabled">Internet access disabled. Please try again later.</string>
     <string name="fetch_current_weather">Fetching weather for current location</string>
     <string name="weather_set_current">Weather already set for current location</string>

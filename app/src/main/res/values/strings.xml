@@ -42,6 +42,10 @@
     <string name="loading_dialog">Loading..</string>
     <string name="waiting_dialog">Please wait..</string>
 
+    <string name="location_disabled">Location Services Disabled</string>
+    <string name="enable_location">Please enable and try again</string>
+    <string name="open_location_settings">Location Settings</string>
+
     <string-array name="display_days">
         <item>3</item><item>4</item><item>5</item><item>6</item>
         <item>7</item><item>8</item><item>9</item><item>10</item>

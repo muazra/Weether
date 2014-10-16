@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.android.weether.util.GeocodeUtil;
+import com.android.weether.util.LocationEnabledUtil;
 
 import java.util.Locale;
 
@@ -31,6 +32,7 @@ public class GetLocationTask {
 
     public void serveCurrentLocation(){
         LocationManager mlocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        LocationEnabledUtil.checkLocationEnabled(mlocationManager, mContext);
         LocationListener mlocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -42,7 +44,7 @@ public class GetLocationTask {
                 editor.putBoolean("locations_exist", false);
                 editor.putString("city", geocode.find(location).get(0).getLocality());
                 editor.putString("state", geocode.find(location).get(0).getAdminArea());
-                editor.commit();
+                editor.apply();
 
                 String WEATHER_URL = "http://api.wunderground.com/api/cd73277d18704fa9/forecast10day/q/" +
                         String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + ".json";
@@ -60,4 +62,5 @@ public class GetLocationTask {
         };
         mlocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, mlocationListener, null);
     }
+
 }

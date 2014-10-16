@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.android.weether.task.LoadWeatherTask;
 import com.android.weether.util.GeocodeUtil;
+import com.android.weether.util.LocationEnabledUtil;
 import com.android.weether.util.NetworkUtil;
 import com.loopj.android.image.SmartImageView;
 
@@ -112,11 +113,12 @@ public class WeatherListActivity extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.weather_list_activity, menu);
 
-        if(mLocation.getBoolean("refresh_select", false))
+        if(mLocation.getBoolean("refresh_select", false)) {
             getActionBar().setTitle(mLocation.getString("city_current", "none") + ", " +
                     mLocation.getString("state_current", "none"));
-        else
+        }else {
             getActionBar().setTitle(mLocation.getString("city", "none") + ", " + mLocation.getString("state", "none"));
+        }
 
         SharedPreferences.Editor editor = mLocation.edit();
         editor.putBoolean("refresh_select", false);
@@ -148,6 +150,7 @@ public class WeatherListActivity extends ListActivity {
 
     private void refreshFeed(){
         LocationManager mlocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationEnabledUtil.checkLocationEnabled(mlocationManager, mContext);
         LocationListener mlocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {

@@ -42,6 +42,10 @@
     <string name="loading_dialog">Cargando..</string>
     <string name="waiting_dialog">por favor espera..</string>
 
+    <string name="location_disabled">Ubicación para minusválidos</string>
+    <string name="enable_location">Por favor, activa y vuelva a intentarlo</string>
+    <string name="open_location_settings">Configuración de ubicación</string>
+
     <string-array name="display_days">
         <item>3</item><item>4</item><item>5</item><item>6</item>
         <item>7</item><item>8</item><item>9</item><item>10</item>

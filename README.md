@@ -1,9 +1,9 @@
 Weether
 ======
 
-Features:
+A weather application for Android. <br>
+Real-time weather data for current and saved locations.<br>
 
-1) Requests weather for current location using LocationManager <br>
-2) Parses JSON from external weather API via AsyncTask <br>
-3) Can save particular location - data persistence via SharedPreferences <br>
-4) Supports Portrait/Landscape <br>
+Simple - but gets the job done. 
+
+Version 1.0.
